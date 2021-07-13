@@ -96,7 +96,7 @@
                                             <td>
                                                 <select name="MaLoai" id="MaLoai" class="MaLoai">
                                                 <?php
-                                                    $conn = mysqli_connect("localhost","root","","shopthoitrang");
+                                                    $conn = mysqli_connect("MYSQL5047.site4now.net","a77512_tranvan","shop_nhom3","db_a77512_tranvan");
                                                     $sql = "SELECT * FROM loaisp";
                                                     $old = mysqli_query($conn,$sql);
                                                  
@@ -121,7 +121,7 @@
                                             <td>
                                                 <select name="MaNSX" id="MaNSX" class="MaNSX">
                                                 <?php
-                                                    $conn = mysqli_connect("localhost","root","","shopthoitrang");
+                                                    $conn = mysqli_connect("MYSQL5047.site4now.net","a77512_tranvan","shop_nhom3","db_a77512_tranvan");
                                                     $sql = "SELECT * FROM nhasanxuat";
                                                     $old = mysqli_query($conn,$sql);
                                                 

@@ -1,5 +1,5 @@
 <?php
-    $conn = mysqli_connect("localhost","root","","shopthoitrang");
+    $conn = mysqli_connect("MYSQL5047.site4now.net","a77512_tranvan","shop_nhom3","db_a77512_tranvan");
     if(!isset($_POST["MaLoaiSP"]))
         //echo "<script>location='cat.php';</script>";
     $layDuLieu="SELECT * FROM loaisp WHERE MaLoaiSP = '".$_POST["MaLoaiSP"]."'";

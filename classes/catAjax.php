@@ -1,5 +1,5 @@
 <?php
-    $conn = mysqli_connect("localhost","root","","shopthoitrang") or die ("Connect fail");
+    $conn = mysqli_connect("MYSQL5047.site4now.net","a77512_tranvan","shop_nhom3","db_a77512_tranvan");
 
     $output ='';
     $sql_select = mysqli_query($conn,"SELECT * FROM loaisp ORDER BY MaLoaiSP Desc");

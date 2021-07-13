@@ -15,7 +15,7 @@
     $ngaysinh = $_POST['ngaysinh'];
     $gender = $_POST['gender'];
     
-    $conn = mysqli_connect("localhost","root","","shop");
+    $conn = mysqli_connect("MYSQL5047.site4now.net","a77512_tranvan","shop_nhom3","db_a77512_tranvan");
 
     $sql = "SELECT * From khachhang where TenDangNhapKH ='$tendangnhap' or SDTKH = '$phoneNumber' ";
     $result = mysqli_query($conn,$sql);

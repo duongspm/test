@@ -1,5 +1,5 @@
 <?php
-    $conn = mysqli_connect("localhost","root","","shopthoitrang");
+    $conn = mysqli_connect("MYSQL5047.site4now.net","a77512_tranvan","shop_nhom3","db_a77512_tranvan");
     global $conn;
     if(!isset($_POST["MaNSX"]))
         //echo "<script>location='nhasanxuatedit.php';</script>";
