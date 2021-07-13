@@ -2,7 +2,7 @@
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block slide-pic" src="../images/banner3.jpg" alt="First slide">
+                    <img class="d-block slide-pic" src="../images/b4.jpg" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h1 style="color:black">Pants</h1>
                         <h4 style="color:black">See how good they feel.</h4>
