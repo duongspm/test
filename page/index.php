@@ -11,8 +11,9 @@
     $truyvan_laySPcao2=mysqli_query($conn,$laySPcao2);
     $cot2=mysqli_fetch_array($truyvan_laySPcao2);
 
-    $laySP="SELECT * FROM sanpham ORDER BY SoLuong DESC LIMIT 0,8";
+    $laySP="SELECT * FROM sanpham where TrangThai ='1' ORDER BY MaSanPham DESC";
     $truyvan_laySP=mysqli_query($conn,$laySP);
+
 
 ?>
 
