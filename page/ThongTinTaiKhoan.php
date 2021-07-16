@@ -11,6 +11,10 @@ $layThongTin="SELECT * FROM thanhvien WHERE TenDangNhap='".$_SESSION["tendangnha
 $truyvanlayThongTin=mysqli_query($conn,$layThongTin);
 $cot=mysqli_fetch_array($truyvanlayThongTin);
 
+$laydonhang ="SELECT * FROM dondat join thanhvien ON dondat.TenDangNhap = thanhvien.TenDangNhap WHERE thanhvien.TenDangNhap='".$_SESSION["tendangnhap"]."'";
+$truyvanlaydonhang=mysqli_query($conn,$laydonhang);
+$donhang=mysqli_fetch_array($truyvanlaydonhang);
+
 ?>
 
 <!--end-breadcrumbs-->
@@ -71,6 +75,8 @@ $cot=mysqli_fetch_array($truyvanlayThongTin);
                             <a class="button" href="#" id="a_doimatkhau">Đổi mật khẩu</a>
                             <hr/>
                             <a class="button" href="#" id="a_doithongtin">Thay thông tin tài khoản</a>
+                            <hr/>
+                            <a class="button" href="#" id="a_doidonhang">Xem đơn hàng</a>
                         </div>
                     </div>
                 </form>
@@ -100,7 +106,60 @@ $cot=mysqli_fetch_array($truyvanlayThongTin);
                         <input id="doimatkhau" type="submit" value="Đổi mật khẩu">
                     </div>
             </div>
-
+            <!---Xem giỏ hàng-->
+            <div class="col-md-6 account-left div_doidonhang" style="display: none">
+                <br>
+                <div class="account-top heading">
+                    <h4><strong>Đơn hàng của bạn</strong></h4>
+                </div>
+                <br>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                        <?php
+                            if($donhang<1){
+                                echo "<h3>Không có giao dịch</h3>";
+                            }else{
+                        ?>
+                            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Mã hóa đơn</th>
+                                        <th>Ngày đặt hàng</th>
+                                        <th>Tình trạng</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                     
+                                <?php 
+                                    while($row = mysqli_fetch_array($truyvanlaydonhang)) {
+                                        $date = new DateTime($row['NgayDat']);
+                                ?>
+                                    <tr>
+                                        <td>#<?php echo $row['MaDonDat']; ?></td>
+                                        <td><?php echo date("d/m/Y",strtotime($row["NgayDat"])); ?></td>
+                                        <td>
+                                            <?php if(trim($row["TrangThai"])==0){
+                                                echo "<span class='text-danger'>Đơn hàng sẽ đến với bạn trong một nốt nhạc <i class='fas fa-music'></i></span>";
+                                            }else{
+                                                echo "<span class='text-success'>Cám ơn bạn đã mua hàng</span>";
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <a href="DonDatHang_Xem.php?MaDonDat=<?php echo $row["MaDonDat"]; ?>" class="btn btn-success">Detail</a>
+                                        </td>
+                                    </tr>
+                                <?php  
+                                    } 
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---->
             <div class="col-md-6 account-left div_doithongtin" style="display: none">
                 <form method="post" action="<?php echo $_SERVER["PHP_SELF"] ?>">
                     <input name="tendangnhap" type="hidden" value="<?php echo $cot["TenDangNhap"]; ?>">
@@ -168,11 +227,19 @@ $cot=mysqli_fetch_array($truyvanlayThongTin);
     $('#a_doimatkhau').click(function(){
         $('.div_doimatkhau').show();
         $('.div_doithongtin').hide();
+        $('.div_doidonhang').hide();
     });
 
     $('#a_doithongtin').click(function(){
         $('.div_doimatkhau').hide();
         $('.div_doithongtin').show();
+        $('.div_doidonhang').hide();
+    });
+
+    $('#a_doidonhang').click(function(){
+        $('.div_doidonhang').show();
+        $('.div_doimatkhau').hide();
+        $('.div_doithongtin').hide();
     });
 
     $(document).ready(function(){
@@ -206,6 +273,38 @@ $cot=mysqli_fetch_array($truyvanlayThongTin);
                 DoiMatKhau(tendangnhap,matkhaucu,matkhaumoi);
             }
         });
+        //đơn hàng
+        $('#doidonhang').click(function(){
+
+        matkhaucu=$('#matkhaucu').val();
+        matkhaumoi=$('#matkhaumoi').val();
+        nhaplaimatkhaumoi=$('#nlmatkhaumoi').val();
+
+        loi=0;
+        if( matkhaucu=="" || matkhaumoi=="")
+        {
+            loi++;
+            $('#dmk_thongbao').text("Mời bạn nhập mặt khẩu cũ và mặt khẩu mới");
+        }
+
+        if(matkhaumoi!=nhaplaimatkhaumoi)
+        {
+            loi++;
+            $('#dmk_thongbao').text("Mật khẩu không trùng khớp");
+        }
+
+        if(loi!=0)
+        {
+            return false;
+        }
+        else
+        {
+            tendangnhap=$('#tendangnhap').val();
+            $('#dmk_thongbao').text("");
+            HuyDonHang(tendangnhap);
+        }
+        });
+        //đơn hàng
 
         $('#doithongtin').click(function(){
             hoten=$('#hoten').val();
@@ -221,12 +320,17 @@ $cot=mysqli_fetch_array($truyvanlayThongTin);
                 loi++;
                 $('#thongbao').text("Hãy nhập đầy đủ thông tin");
             }
-
-            if(isNaN(dienthoai))
-            {
-                loi++;
-                $('#thongbao').text("Điện thoại phải là số");
-            }
+            var vnf_regex = /((09|03|02|08|05)+([0-9]{8})\b)/g;
+            if (vnf_regex.test(dienthoai) == false) 
+                {
+                    loi++;
+                    $('#thongbao').text("Số điện thoại của bạn không đúng định dạng! (10 số và hai số đầu là 09|03|08|05|02)");
+                }
+            // if(isNaN(dienthoai))
+            // {
+            //     loi++;
+            //     $('#thongbao').text("Điện thoại phải là số");
+            // }
 
             if(loi!=0)
             {
