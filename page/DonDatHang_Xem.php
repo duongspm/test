@@ -14,46 +14,54 @@ $cot=mysqli_fetch_array($truyvanlayThongTin);
 $laydonhang ="SELECT * FROM dondat join thanhvien ON dondat.TenDangNhap = thanhvien.TenDangNhap WHERE thanhvien.TenDangNhap='".$_SESSION["tendangnhap"]."'";
 $truyvanlaydonhang=mysqli_query($conn,$laydonhang);
 $donhang=mysqli_fetch_array($truyvanlaydonhang);
-
- 
-    if(isset($_GET["MaDonDatXoa"]))
+if(isset($_GET["MaDonDatXoa"]))
+{
+    $layTrangThai="SELECT * FROM dondat  WHERE MaDonDat='".$_GET["MaDonDatXoa"]."'";
+    $truyvanlaytrangthai = mysqli_query($conn,$layTrangThai);
+    $trangthai=mysqli_fetch_array($truyvanlaytrangthai);
+    if($trangthai["TrangThai"] == 0)
     {
-        $xoaDuLieu1="DELETE FROM ct_dondat  WHERE MaDonDat='".$_GET["MaDonDatXoa"]."' and TrangThai='1'";//đã giao
+        $xoaDuLieu1="DELETE FROM ct_dondat  WHERE MaDonDat='".$_GET["MaDonDatXoa"]."'";
         $xoa1=mysqli_query($conn,$xoaDuLieu1);
-        $xoaDuLieu2="DELETE FROM dondat  WHERE MaDonDat='".$_GET["MaDonDatXoa"]."' and TrangThai='1'";
+        $xoaDuLieu2="DELETE FROM dondat  WHERE MaDonDat='".$_GET["MaDonDatXoa"]."'";
         if(mysqli_query($conn,$xoaDuLieu2))
         {
-            echo "<script>alert('Hủy đơn hàng thành công ! Huhu :((')</script>";
+            echo "<script>alert('Hủy đơn hàng thành công !')</script>";
         }
         else
         {
-            echo "<script>alert('Đơn hàng đã được giao sao bạn lại muốn xóa!')</script>";
+            echo "<script>alert('Đã xảy ra lỗi !')</script>";
         }
-    }
-
-    if(!isset($_GET["MaDonDat"]))
-        echo "<script>location='ThongTinTaiKhoan.php';</script>";
-
-    $layDonDat="SELECT dondat.* , thanhvien.HoTen  hotentv ,thanhvien.DienThoai, nhanvien.HoTen  hotennv FROM dondat
-                    INNER JOIN thanhvien ON dondat.TenDangNhap=thanhvien.TenDangNhap
-                    INNER JOIN nhanvien ON dondat.MaNhanVien=nhanvien.MaNhanVien
-                    WHERE MaDonDat='".$_GET["MaDonDat"]."'";
-    $truyvan_layDonDat=mysqli_query($conn,$layDonDat);
-    if(mysqli_num_rows($truyvan_layDonDat)>0)
-    {
-        //lay thong tin don dat hang
-        $cotDDH=mysqli_fetch_array($truyvan_layDonDat);
-
-        //lay chi tiet don dat hang
-        $layCT_DonDat="SELECT  sanpham.*, ct_dondat.* FROM ct_dondat
-                    INNER JOIN sanpham ON ct_dondat.MaSanPham=sanpham.MaSanPham
-                    WHERE MaDonDat='".$_GET["MaDonDat"]."'";
-        $truyvan_layCT_DonDat=mysqli_query($conn,$layCT_DonDat);
     }
     else
     {
-        echo "<script>location='ThongTinTaiKhoan.php';</script>";
+        echo "<script>alert('Hủy thất bại! Đơn hàng đã giao!')</script>";
     }
+}
+
+if(!isset($_GET["MaDonDat"]))
+    echo "<script>location='ThongTinTaiKhoan.php';</script>";
+
+$layDonDat="SELECT dondat.* , thanhvien.HoTen  hotentv ,thanhvien.DienThoai, nhanvien.HoTen  hotennv FROM dondat
+                INNER JOIN thanhvien ON dondat.TenDangNhap=thanhvien.TenDangNhap
+                INNER JOIN nhanvien ON dondat.MaNhanVien=nhanvien.MaNhanVien
+                WHERE MaDonDat='".$_GET["MaDonDat"]."'";
+$truyvan_layDonDat=mysqli_query($conn,$layDonDat);
+if(mysqli_num_rows($truyvan_layDonDat)>0)
+{
+    //lay thong tin don dat hang
+    $cotDDH=mysqli_fetch_array($truyvan_layDonDat);
+
+    //lay chi tiet don dat hang
+    $layCT_DonDat="SELECT  sanpham.*, ct_dondat.* FROM ct_dondat
+                INNER JOIN sanpham ON ct_dondat.MaSanPham=sanpham.MaSanPham
+                WHERE MaDonDat='".$_GET["MaDonDat"]."'";
+    $truyvan_layCT_DonDat=mysqli_query($conn,$layCT_DonDat);
+}
+else
+{
+    echo "<script>location='ThongTinTaiKhoan.php';</script>";
+}
 
 ?>
 <!--end-breadcrumbs-->
